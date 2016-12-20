@@ -11,6 +11,6 @@ import retrofit2.http.Query;
 public interface PostsInterface {
 
     @GET("last_posts/")
-    Call<Response> getLastPosts(@Query("callpage") int callpage, @Query("perpage") int perpage);
+    Call<AllPostsResponse> getLastPosts(@Query("callpage") int callpage, @Query("perpage") int perpage);
 
 }
