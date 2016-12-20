@@ -17,13 +17,19 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Object request;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getRequest("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2502265&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
 
-        new RequestTask().execute("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2502265&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
+//        new RequestTask().execute("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2502265&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
+    }
+
+    public void getRequest(String uri) {
     }
 
 
@@ -32,40 +38,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... uri) {
 
-            String jsonString = "";
-            try {
+            for (long i = 0; i < Long.MAX_VALUE; i++) {
 
-                URL url = new URL(uri[0]);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setRequestMethod("GET");
-
-                urlConnection.setReadTimeout(10000 /* milliseconds */);
-                urlConnection.setConnectTimeout(15000 /* milliseconds */);
-
-                urlConnection.setDoOutput(true);
-
-                urlConnection.connect();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-
-                char[] buffer = new char[1024];
-
-// TODO: 12/20/2016 test this
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-
-                jsonString = sb.toString();
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
-            return jsonString;
+
+            return "";
         }
 
         @Override
