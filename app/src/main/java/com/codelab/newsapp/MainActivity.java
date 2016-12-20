@@ -1,75 +1,60 @@
 package com.codelab.newsapp;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.activity_main)
+    LinearLayout activityMain;
+    @BindView(R.id.content)
+    TextView content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Consts.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
 
-        new RequestTask().execute("https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%3D2502265&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=");
-    }
+        PostsInterface postsInterface = retrofit.create(PostsInterface.class);
 
+        Call<Response> call = postsInterface.getLastPosts(1, 10);
 
-    class RequestTask extends AsyncTask<String, String, String> {
+        call.enqueue(new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
 
-        @Override
-        protected String doInBackground(String... uri) {
+                Response res = response.body();
 
-            String jsonString = "";
-            try {
+                title.setText(res.getResult().get(0).getPostTitle());
+                content.setText(res.getResult().get(0).getPostContent());
 
-                URL url = new URL(uri[0]);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                urlConnection.setRequestMethod("GET");
-
-                urlConnection.setReadTimeout(10000 /* milliseconds */);
-                urlConnection.setConnectTimeout(15000 /* milliseconds */);
-
-                urlConnection.setDoOutput(true);
-
-                urlConnection.connect();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-
-                char[] buffer = new char[1024];
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-
-                jsonString = sb.toString();
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
-            return jsonString;
-        }
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            Response.Query query = new Gson().fromJson(result, Response.Query.class);
-
-        }
     }
+
 
 }
