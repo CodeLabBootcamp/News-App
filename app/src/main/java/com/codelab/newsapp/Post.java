@@ -1,10 +1,14 @@
 package com.codelab.newsapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Post {
+public class Post implements Parcelable {
     /**
      * ID : 22
      * post_title : الويب الخفي - الديب ويب
@@ -116,12 +120,8 @@ public class Post {
     private boolean postFormat;
     @SerializedName("custom_fields")
     private String customFields;
-    @SerializedName("taxonomies")
-    private List<?> taxonomies;
     @SerializedName("category")
     private List<Category> category;
-    @SerializedName("tags")
-    private List<?> tags;
     @SerializedName("author")
     private List<Author> author;
 
@@ -295,28 +295,12 @@ public class Post {
         this.customFields = customFields;
     }
 
-    public List<?> getTaxonomies() {
-        return taxonomies;
-    }
-
-    public void setTaxonomies(List<?> taxonomies) {
-        this.taxonomies = taxonomies;
-    }
-
     public List<Category> getCategory() {
         return category;
     }
 
     public void setCategory(List<Category> category) {
         this.category = category;
-    }
-
-    public List<?> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<?> tags) {
-        this.tags = tags;
     }
 
     public List<Author> getAuthor() {
@@ -327,7 +311,7 @@ public class Post {
         this.author = author;
     }
 
-    public static class Category {
+    public static class Category implements Parcelable {
         /**
          * id : 1
          * name : Uncategorized
@@ -419,9 +403,52 @@ public class Post {
         public void setCustomFields(String customFields) {
             this.customFields = customFields;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.name);
+            dest.writeString(this.slug);
+            dest.writeString(this.description);
+            dest.writeString(this.count);
+            dest.writeString(this.parent);
+            dest.writeString(this.image);
+            dest.writeString(this.customFields);
+        }
+
+        public Category() {
+        }
+
+        protected Category(Parcel in) {
+            this.id = in.readString();
+            this.name = in.readString();
+            this.slug = in.readString();
+            this.description = in.readString();
+            this.count = in.readString();
+            this.parent = in.readString();
+            this.image = in.readString();
+            this.customFields = in.readString();
+        }
+
+        public static final Creator<Category> CREATOR = new Creator<Category>() {
+            @Override
+            public Category createFromParcel(Parcel source) {
+                return new Category(source);
+            }
+
+            @Override
+            public Category[] newArray(int size) {
+                return new Category[size];
+            }
+        };
     }
 
-    public static class Author {
+    public static class Author implements Parcelable {
         /**
          * ID : 1
          * user_login : sabri
@@ -456,8 +483,6 @@ public class Post {
         private String userRegistered;
         @SerializedName("display_name")
         private String displayName;
-        @SerializedName("role")
-        private Role role;
         @SerializedName("first_name")
         private String firstName;
         @SerializedName("last_name")
@@ -531,14 +556,6 @@ public class Post {
 
         public void setDisplayName(String displayName) {
             this.displayName = displayName;
-        }
-
-        public Role getRole() {
-            return role;
-        }
-
-        public void setRole(Role role) {
-            this.role = role;
         }
 
         public String getFirstName() {
@@ -629,5 +646,140 @@ public class Post {
                 this.administrator = administrator;
             }
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.ID);
+            dest.writeString(this.userLogin);
+            dest.writeString(this.userNicename);
+            dest.writeString(this.userEmail);
+            dest.writeString(this.userUrl);
+            dest.writeString(this.userRegistered);
+            dest.writeString(this.displayName);
+            dest.writeString(this.firstName);
+            dest.writeString(this.lastName);
+            dest.writeString(this.nickname);
+            dest.writeString(this.description);
+            dest.writeString(this.avatar);
+            dest.writeString(this.aim);
+            dest.writeString(this.jabber);
+            dest.writeString(this.yim);
+            dest.writeString(this.customFields);
+        }
+
+        public Author() {
+        }
+
+        protected Author(Parcel in) {
+            this.ID = in.readString();
+            this.userLogin = in.readString();
+            this.userNicename = in.readString();
+            this.userEmail = in.readString();
+            this.userUrl = in.readString();
+            this.userRegistered = in.readString();
+            this.displayName = in.readString();
+            this.firstName = in.readString();
+            this.lastName = in.readString();
+            this.nickname = in.readString();
+            this.description = in.readString();
+            this.avatar = in.readString();
+            this.aim = in.readString();
+            this.jabber = in.readString();
+            this.yim = in.readString();
+            this.customFields = in.readString();
+        }
+
+        public static final Creator<Author> CREATOR = new Creator<Author>() {
+            @Override
+            public Author createFromParcel(Parcel source) {
+                return new Author(source);
+            }
+
+            @Override
+            public Author[] newArray(int size) {
+                return new Author[size];
+            }
+        };
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.ID);
+        dest.writeString(this.postTitle);
+        dest.writeString(this.guid);
+        dest.writeString(this.postContent);
+        dest.writeString(this.postAuthor);
+        dest.writeString(this.postExcerpt);
+        dest.writeString(this.postDate);
+        dest.writeString(this.postDateGmt);
+        dest.writeString(this.commentStatus);
+        dest.writeString(this.pingStatus);
+        dest.writeString(this.postName);
+        dest.writeString(this.postModified);
+        dest.writeString(this.postModifiedGmt);
+        dest.writeString(this.postContentFiltered);
+        dest.writeString(this.postParent);
+        dest.writeString(this.menuOrder);
+        dest.writeString(this.commentCount);
+        dest.writeString(this.featuredimage);
+        dest.writeString(this.featuredthumb);
+        dest.writeByte(this.postFormat ? (byte) 1 : (byte) 0);
+        dest.writeString(this.customFields);
+        dest.writeList(this.category);
+        dest.writeList(this.author);
+    }
+
+    public Post() {
+    }
+
+    protected Post(Parcel in) {
+        this.ID = in.readString();
+        this.postTitle = in.readString();
+        this.guid = in.readString();
+        this.postContent = in.readString();
+        this.postAuthor = in.readString();
+        this.postExcerpt = in.readString();
+        this.postDate = in.readString();
+        this.postDateGmt = in.readString();
+        this.commentStatus = in.readString();
+        this.pingStatus = in.readString();
+        this.postName = in.readString();
+        this.postModified = in.readString();
+        this.postModifiedGmt = in.readString();
+        this.postContentFiltered = in.readString();
+        this.postParent = in.readString();
+        this.menuOrder = in.readString();
+        this.commentCount = in.readString();
+        this.featuredimage = in.readString();
+        this.featuredthumb = in.readString();
+        this.postFormat = in.readByte() != 0;
+        this.customFields = in.readString();
+        this.category = new ArrayList<Category>();
+        in.readList(this.category, Category.class.getClassLoader());
+        this.author = new ArrayList<Author>();
+        in.readList(this.author, Author.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 }

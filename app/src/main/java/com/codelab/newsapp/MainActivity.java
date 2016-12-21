@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         APIHelper.getPostsInterface().getLastPosts(1, 5).enqueue(new Callback<AllPostsResponse>() {
             @Override
             public void onResponse(Call<AllPostsResponse> call, Response<AllPostsResponse> response) {

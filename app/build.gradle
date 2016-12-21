@@ -10,6 +10,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // USE YOUR OWN ID AND GOOGLE PROJECT NUMBER
+        manifestPlaceholders = [onesignal_app_id               : "54487fc1-d0cc-46fd-9cf6-371d474a3112",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: 460935547466
+        ]
+
     }
     buildTypes {
         release {
@@ -38,6 +44,14 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    compile 'com.onesignal:OneSignal:3.+@aar'
+
+    // Required for OneSignal, even if you have added FCM.
+    compile 'com.google.android.gms:play-services-gcm:+'
+
+    // Required for geotagging
+    compile "com.google.android.gms:play-services-location:+"
 
 
 }

@@ -91,7 +91,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void onClick(View view) {
             Post post = items.get(getLayoutPosition());
             Intent intent = new Intent(context, SinglePostActivity.class);
-            intent.putExtra("ID", post.getID());
+            intent.putExtra("POST", post);
             context.startActivity(intent);
         }
 
