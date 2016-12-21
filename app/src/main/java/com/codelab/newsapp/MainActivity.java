@@ -16,8 +16,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,16 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Consts.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        PostsInterface postsInterface = retrofit.create(PostsInterface.class);
-
-        Call<AllPostsResponse> call = postsInterface.getLastPosts(1, 10);
-
-        call.enqueue(new Callback<AllPostsResponse>() {
+        APIHelper.getPostsInterface().getLastPosts(1, 5).enqueue(new Callback<AllPostsResponse>() {
             @Override
             public void onResponse(Call<AllPostsResponse> call, Response<AllPostsResponse> response) {
                 fillData(response.body().getResult());
@@ -57,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 t.printStackTrace();
                 Toast.makeText(MainActivity.this, "Loading Failed", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
-
             }
         });
 

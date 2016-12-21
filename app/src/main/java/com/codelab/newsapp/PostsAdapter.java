@@ -1,12 +1,16 @@
 package com.codelab.newsapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     public PostsAdapter(Context context, List<Post> items) {
         this.context = context;
+        if (items == null)
+            items = new ArrayList<>();
         this.items = items;
     }
 
@@ -42,6 +48,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.postTitle.setText(post.getPostTitle());
         holder.postContent.setText(post.getPostContent());
 
+        Picasso.with(context).load(post.getFeaturedimage()).placeholder(R.drawable.ic_photo_black_24dp).into(holder.postImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                // do things when image is loaded
+            }
+
+            @Override
+            public void onError() {
+                // do things when image loading fails
+            }
+        });
     }
 
     @Override
@@ -72,7 +89,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            //TODO Handle clicks here
+            Post post = items.get(getLayoutPosition());
+            Intent intent = new Intent(context, SinglePostActivity.class);
+            intent.putExtra("ID", post.getID());
+            context.startActivity(intent);
         }
 
     }

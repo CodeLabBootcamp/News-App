@@ -262,6 +262,8 @@ public class Post {
     }
 
     public String getFeaturedimage() {
+        if (featuredimage.isEmpty())
+            featuredimage = "http://www.google.com";
         return featuredimage;
     }
 

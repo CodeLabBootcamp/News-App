@@ -13,4 +13,7 @@ public interface PostsInterface {
     @GET("last_posts/")
     Call<AllPostsResponse> getLastPosts(@Query("callpage") int callpage, @Query("perpage") int perpage);
 
+    @GET("getpost/")
+    Call<AllPostsResponse> getSinglePost(@Query("post_id") String postId);
+
 }
